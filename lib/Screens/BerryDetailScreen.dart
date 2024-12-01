@@ -27,6 +27,7 @@ class _BerryDetailScreenState extends State<BerryDetailScreen> {
       appBar: AppBar(
         title: const Text('Detalle de Berry'),
       ),
+      
       body: FutureBuilder<BerryDetail>(
         future: berryDetailFuture,
         builder: (context, snapshot) {
@@ -41,6 +42,7 @@ class _BerryDetailScreenState extends State<BerryDetailScreen> {
           final berry = snapshot.data!;
 
           return SingleChildScrollView(
+            
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
