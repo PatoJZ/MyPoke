@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:pokemon_browser/details/pokedetail.dart'; 
 import 'package:pokemon_browser/services/pokeServices.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
+import 'package:share_plus/share_plus.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
 class PokemonDetailScreen extends StatefulWidget {
   final String pokemonId;
@@ -22,11 +25,56 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
     pokemonDetailFuture = PokemonService().fetchPokemonDetail(widget.pokemonId);
   }
 
+  /// Descarga la imagen desde la URL y la guarda en un archivo temporal.
+  Future<File> _downloadImage(String url) async {
+    final response = await http.get(Uri.parse(url));
+    final tempDir = await getTemporaryDirectory();
+    final filePath = '${tempDir.path}/pokemon_image.png';
+    final file = File(filePath);
+    return file.writeAsBytes(response.bodyBytes);
+  }
+
+  /// Comparte texto e imagen.
+  Future<void> _sharePokemon(PokemonDetail pokemon) async {
+    try {
+      final imageFile = await _downloadImage(pokemon.spriteUrl);
+      final shareContent = '''
+Nombre: ${pokemon.name}
+NºPokeDex: ${pokemon.id}
+Altura: ${pokemon.height}
+Peso: ${pokemon.weight}
+Tipos: ${pokemon.types.join(', ')}
+
+      ''';
+
+      Share.shareXFiles(
+        [XFile(imageFile.path)],
+        text: shareContent,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al compartir: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detalle de Pokémon'),
+        actions: [
+          // Botón de compartir
+          IconButton(
+            icon: const Icon(Icons.share),
+            onPressed: () async {
+              final pokemon = await pokemonDetailFuture; // Esperar al detalle del Pokémon
+              if (pokemon != null) {
+                await _sharePokemon(pokemon);
+              }
+            },
+          ),
+        ],
       ),
       body: FutureBuilder<PokemonDetail>(
         future: pokemonDetailFuture,
