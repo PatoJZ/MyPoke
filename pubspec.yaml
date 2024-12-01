@@ -39,6 +39,8 @@ dependencies:
   http: ^1.2.2
   cached_network_image: ^3.2.1  # Agrega esta línea si aún no la tienes
   share_plus: ^10.1.2
+  path_provider: ^2.1.5
+  sqflite: ^2.4.1
   
 
 dev_dependencies:

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class LocationsScreen extends StatefulWidget {
-  const LocationsScreen({super.key});
+class FavoriteScreen extends StatefulWidget {
+  const FavoriteScreen({super.key});
 
   @override
-  _LocationsScreenState createState() => _LocationsScreenState();
+  _FavoriteScreenState createState() => _FavoriteScreenState();
 }
 
-class _LocationsScreenState extends State<LocationsScreen> {
+class _FavoriteScreenState extends State<FavoriteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Locaciones'),
+        title: Text('Favoritos'),
       ),
       body: const Center(
         child: Text(

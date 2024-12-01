@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pokemon_browser/Screens/BerriesScreen.dart';
 import 'package:pokemon_browser/Screens/HomeScreen.dart';
-import 'package:pokemon_browser/Screens/LocationsScreen.dart';
+import 'package:pokemon_browser/Screens/FavoriteScreen.dart';
 import 'package:pokemon_browser/Screens/PokemonsScreen.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -17,7 +17,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const BerriesScreen(),
-    const LocationsScreen(),
+    const FavoriteScreen(),
     const PokemonsScreen(),
   ];
 
@@ -42,8 +42,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
             label: 'berries',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
-            label: 'Locaciones',
+            icon: Icon(Icons.favorite),
+            label: 'Favoritos',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.pets),

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pokemon_browser/DataBase/db_helper.dart';
 import 'package:pokemon_browser/Screens/BerryDetailScreen.dart';
 import 'package:pokemon_browser/classes/berry.dart';
 import 'package:pokemon_browser/services/berryServices.dart';
-
-
 
 class BerriesScreen extends StatefulWidget {
   const BerriesScreen({super.key});
@@ -19,7 +18,7 @@ class _BerriesScreenState extends State<BerriesScreen> {
   void initState() {
     super.initState();
     // servicio para obtener las berries
-    berriesFuture = BerryService().fetchBerries();  
+    berriesFuture = BerryService().fetchBerries();
   }
 
   @override
@@ -30,7 +29,7 @@ class _BerriesScreenState extends State<BerriesScreen> {
       ),
       body: FutureBuilder<List<Berry>>(
         // Asignar lista de berries
-        future: berriesFuture,  
+        future: berriesFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -51,18 +50,21 @@ class _BerriesScreenState extends State<BerriesScreen> {
               final berry = berries[index];
               final berryId =
                   berry.url.split('/').where((e) => e.isNotEmpty).last;
-              return ListTile(
-                title: Text(berry.name.toUpperCase()),
-                subtitle: Text('ID: $berryId'),
-                onTap: () {
-                  // Navegar a la pantalla de detalles al seleccionar una berry
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BerryDetailScreen(berryId: berryId),
-                    ),
-                  );
-                },
+              return Card(
+                child: ListTile(
+                  title: Text(berry.name.toUpperCase()),
+                  subtitle: Text('ID: $berryId'),
+                  onTap: () {
+                    // Navegar a la pantalla de detalles al seleccionar una berry
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            BerryDetailScreen(berryId: berryId),
+                      ),
+                    );
+                  },
+                ),
               );
             },
           );

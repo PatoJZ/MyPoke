@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:pokemon_browser/DataBase/db_helper.dart';
+
 class BerryDetail {
   final String name;
   final int id;
@@ -40,5 +44,38 @@ class BerryDetail {
       naturalGiftPower: json['natural_gift_power'],
       imageUrl: berryImageUrl,
     );
+  }
+  
+  get http => null;
+  Future<BerryDetail> fetchBerryDetail(String berryId) async {
+    final String url = "https://pokeapi.co/api/v2/berry/$berryId/";
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final berryDetail = BerryDetail.fromJson(data);
+
+        // Guardar en SQLite
+        await DBHelper().insertBerry({
+          'id': berryDetail.id,
+          'name': berryDetail.name,
+          'firmness': berryDetail.firmness,
+          'growth_time': berryDetail.growthTime,
+          'max_harvest': berryDetail.maxHarvest,
+          'size': berryDetail.size,
+          'smoothness': berryDetail.smoothness,
+          'natural_gift_type': berryDetail.naturalGiftType,
+          'natural_gift_power': berryDetail.naturalGiftPower,
+          'image_url': berryDetail.imageUrl,
+          'is_favorite': 0,
+        });
+
+        return berryDetail;
+      } else {
+        throw Exception('Error al cargar el detalle de la berry');
+      }
+    } catch (e) {
+      throw Exception('Error al conectar con la API: $e');
+    }
   }
 }

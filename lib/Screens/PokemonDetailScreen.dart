@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon_browser/details/pokedetail.dart'; 
+import 'package:pokemon_browser/details/pokedetail.dart';
 import 'package:pokemon_browser/services/pokeServices.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:share_plus/share_plus.dart';
@@ -10,7 +10,8 @@ import 'package:http/http.dart' as http;
 class PokemonDetailScreen extends StatefulWidget {
   final String pokemonId;
 
-  const PokemonDetailScreen({Key? key, required this.pokemonId}) : super(key: key);
+  const PokemonDetailScreen({Key? key, required this.pokemonId})
+      : super(key: key);
 
   @override
   _PokemonDetailScreenState createState() => _PokemonDetailScreenState();
@@ -68,7 +69,8 @@ Tipos: ${pokemon.types.join(', ')}
           IconButton(
             icon: const Icon(Icons.share),
             onPressed: () async {
-              final pokemon = await pokemonDetailFuture; // Esperar al detalle del Pokémon
+              final pokemon =
+                  await pokemonDetailFuture; // Esperar al detalle del Pokémon
               if (pokemon != null) {
                 await _sharePokemon(pokemon);
               }
@@ -95,19 +97,25 @@ Tipos: ${pokemon.types.join(', ')}
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Nombre: ${pokemon.name}', style: const TextStyle(fontSize: 18)),
-                  Text('ID: ${pokemon.id}', style: const TextStyle(fontSize: 18)),
-                  Text('Altura: ${pokemon.height}', style: const TextStyle(fontSize: 18)),
-                  Text('Peso: ${pokemon.weight}', style: const TextStyle(fontSize: 18)),
-                  Text('Tipos: ${pokemon.types.join(', ')}', style: const TextStyle(fontSize: 18)),
-
+                  Text('Nombre: ${pokemon.name}',
+                      style: const TextStyle(fontSize: 18)),
+                  Text('ID: ${pokemon.id}',
+                      style: const TextStyle(fontSize: 18)),
+                  Text('Altura: ${pokemon.height}',
+                      style: const TextStyle(fontSize: 18)),
+                  Text('Peso: ${pokemon.weight}',
+                      style: const TextStyle(fontSize: 18)),
+                  Text('Tipos: ${pokemon.types.join(', ')}',
+                      style: const TextStyle(fontSize: 18)),
                   const SizedBox(height: 16),
                   CachedNetworkImage(
                     imageUrl: pokemon.spriteUrl,
                     width: 200,
                     height: 200,
-                    placeholder: (context, url) => const CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.red, size: 48),
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error, color: Colors.red, size: 48),
                   ),
                 ],
               ),

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pokemon_browser/classes/pokemon.dart'; 
+import 'package:pokemon_browser/classes/pokemon.dart';
 import 'package:pokemon_browser/services/pokeServices.dart';
 import 'PokemonDetailScreen.dart';
-
-
-
 
 class PokemonsScreen extends StatefulWidget {
   const PokemonsScreen({Key? key}) : super(key: key);
@@ -50,19 +47,20 @@ class _PokemonsScreenState extends State<PokemonsScreen> {
               final pokemon = pokemons[index];
               final pokemonId =
                   pokemon.url.split('/').where((e) => e.isNotEmpty).last;
-
-              return ListTile(
+              return Card(
+                  child: ListTile(
                 title: Text(pokemon.name.toUpperCase()),
                 subtitle: Text('ID: $pokemonId'),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PokemonDetailScreen(pokemonId: pokemonId),
+                      builder: (context) =>
+                          PokemonDetailScreen(pokemonId: pokemonId),
                     ),
                   );
                 },
-              );
+              ));
             },
           );
         },
