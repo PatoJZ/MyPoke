@@ -16,7 +16,7 @@ class DBHelper {
     return _database!;
   }
 
-    Future<Database> _initDB() async {
+  Future<Database> _initDB() async {
     final dbPath = await getDatabasesPath();
     return openDatabase(
       join(dbPath, 'berries_and_pokemon.db'),
@@ -44,16 +44,26 @@ class DBHelper {
             weight INTEGER,
             sprite_url TEXT,
             types TEXT
+            is_favorite INTEGER DEFAULT 0
           )
         ''');
       },
-      version: 1,
+      version: 2, // Incrementamos la versión de la base de datos
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          // Migración para agregar la columna is_favorite a pokemons si no existe
+          await db.execute(
+              'ALTER TABLE pokemons ADD COLUMN is_favorite INTEGER DEFAULT 0');
+        }
+      },
     );
   }
+
   // Métodos para la tabla de Pokémon
   Future<void> insertPokemon(Map<String, dynamic> pokemon) async {
     final db = await database;
-    await db.insert('pokemons', pokemon, conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert('pokemons', pokemon,
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future<List<Map<String, dynamic>>> getAllPokemons() async {
@@ -65,12 +75,26 @@ class DBHelper {
     final db = await database;
     await db.delete('pokemons');
   }
-  
-  
+
+  Future<void> updatePokemonFavoriteStatus(int id, int isFavorite) async {
+    final db = await database;
+    await db.update(
+      'pokemons',
+      {'is_favorite': isFavorite},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getFavoritePokemons() async {
+    final db = await database;
+    return db.query('pokemons', where: 'is_favorite = ?', whereArgs: [1]);
+  }
 
   Future<void> insertBerry(Map<String, dynamic> berry) async {
     final db = await database;
-    await db.insert('berries', berry, conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert('berries', berry,
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future<List<Map<String, dynamic>>> getAllBerries() async {
@@ -85,7 +109,7 @@ class DBHelper {
 
   Future<void> updateFavoriteStatus(int id, int isFavorite) async {
     final db = await database;
-    await db.update('berries', {'is_favorite': isFavorite}, where: 'id = ?', whereArgs: [id]);
+    await db.update('berries', {'is_favorite': isFavorite},
+        where: 'id = ?', whereArgs: [id]);
   }
-  
 }

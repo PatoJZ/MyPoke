@@ -15,10 +15,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    const HomeScreen(),
+    //const HomeScreen(),
     const BerriesScreen(),
-    const FavoriteScreen(),
     const PokemonsScreen(),
+    const FavoriteScreen(),
   ];
 
   @override
@@ -33,21 +33,21 @@ class _NavigationScreenState extends State<NavigationScreen> {
           });
         },
         items: const [
-           BottomNavigationBarItem(
-            icon: Icon(Icons.house),
-            label: 'Home',
-          ),
+          // BottomNavigationBarItem(
+          //  icon: Icon(Icons.house),
+          //  label: 'Home',
+          //),
           BottomNavigationBarItem(
             icon: Icon(Icons.circle),
             label: 'berries',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favoritos',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.pets),
             label: 'Pokemones',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favoritos',
           ),
         ],
       ),

@@ -54,6 +54,33 @@ class _BerriesScreenState extends State<BerriesScreen> {
                 child: ListTile(
                   title: Text(berry.name.toUpperCase()),
                   subtitle: Text('ID: $berryId'),
+                  trailing: IconButton(
+                    icon: Icon(
+                      berry.isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: berry.isFavorite ? Colors.red : Colors.grey,
+                    ),
+                    onPressed: () async {
+                      // Mostrar un indicador de progreso opcional o desactivar temporalmente la interacción del usuario
+                      final isCurrentlyFavorite = berry.isFavorite;
+
+                      // Actualizar el estado de favorito después de la operación asíncrona
+                      try {
+                        // Actualiza la base de datos antes de cambiar el estado
+                        await DBHelper().updateFavoriteStatus(
+                          int.parse(berryId),
+                          isCurrentlyFavorite ? 0 : 1,
+                        );
+
+                        // Si la operación fue exitosa, cambia el estado localmente
+                        setState(() {
+                          berry.isFavorite = !isCurrentlyFavorite;
+                        });
+                      } catch (e) {
+                        // Manejar el error aquí si la operación falla
+                        print('Error al actualizar el estado favorito: $e');
+                      }
+                    },
+                  ),
                   onTap: () {
                     // Navegar a la pantalla de detalles al seleccionar una berry
                     Navigator.push(
