@@ -8,6 +8,7 @@ class BerryDetail {
   final int smoothness;
   final String naturalGiftType;
   final int naturalGiftPower;
+  final String imageUrl;
 
   BerryDetail({
     required this.name,
@@ -19,9 +20,14 @@ class BerryDetail {
     required this.smoothness,
     required this.naturalGiftType,
     required this.naturalGiftPower,
+    required this.imageUrl,
   });
 
   factory BerryDetail.fromJson(Map<String, dynamic> json) {
+    //  URL de la imagen
+    final berryImageUrl =
+        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/berries/${json['name'].toLowerCase()}-berry.png";
+
     return BerryDetail(
       name: json['name'],
       id: json['id'],
@@ -32,6 +38,7 @@ class BerryDetail {
       smoothness: json['smoothness'],
       naturalGiftType: json['natural_gift_type']['name'],
       naturalGiftPower: json['natural_gift_power'],
+      imageUrl: berryImageUrl,
     );
   }
 }

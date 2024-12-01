@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   connectivity_plus: ^3.0.3
   http: ^1.2.2
+  cached_network_image: ^3.2.1  # Agrega esta línea si aún no la tienes
   
 
 dev_dependencies:

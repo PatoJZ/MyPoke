@@ -1,37 +1,31 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:pokemon_browser/classes/berry.dart';
-import 'package:pokemon_browser/details/berrydetail.dart'; // Importar el modelo de Berry
+import 'package:pokemon_browser/classes/berry.dart'; 
+import 'package:pokemon_browser/details/berrydetail.dart';
 
 class BerryService {
-  static const String baseUrl = "https://pokeapi.co/api/v2/berry";
+  final String baseUrl = "https://pokeapi.co/api/v2/berry/";
+
+  //obtener el detalle de una berry
   Future<BerryDetail> fetchBerryDetail(String berryId) async {
-    final String url = "https://pokeapi.co/api/v2/berry/$berryId/";
-    try {
-      final response = await http.get(Uri.parse(url));
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        return BerryDetail.fromJson(data);
-      } else {
-        throw Exception('Error al cargar el detalle de la berry');
-      }
-    } catch (e) {
-      throw Exception('Error al conectar con la API: $e');
+    final response = await http.get(Uri.parse('$baseUrl$berryId/'));
+
+    if (response.statusCode == 200) {
+      return BerryDetail.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to load berry details');
     }
   }
-  // Obtener todas las berries sin límite
+
+  //obtener todas las berries
   Future<List<Berry>> fetchBerries() async {
-    try {
-      final response = await http.get(Uri.parse(baseUrl));
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        final results = data['results'] as List;
-        return results.map((e) => Berry.fromJson(e)).toList();
-      } else {
-        throw Exception('Error al cargar las berries');
-      }
-    } catch (e) {
-      throw Exception('Error al conectar con la API: $e');
+    final response = await http.get(Uri.parse('$baseUrl'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body)['results'];
+      return data.map((item) => Berry.fromJson(item)).toList();
+    } else {
+      throw Exception('Failed to load berries');
     }
   }
 }

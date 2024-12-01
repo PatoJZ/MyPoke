@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pokemon_browser/Screens/BerryDetailScreen.dart';
 import 'package:pokemon_browser/classes/berry.dart';
 import 'package:pokemon_browser/services/berryServices.dart';
-// Modelo de Berry
+
+
 
 class BerriesScreen extends StatefulWidget {
   const BerriesScreen({super.key});
@@ -17,7 +18,8 @@ class _BerriesScreenState extends State<BerriesScreen> {
   @override
   void initState() {
     super.initState();
-    berriesFuture = BerryService().fetchBerries();
+    // servicio para obtener las berries
+    berriesFuture = BerryService().fetchBerries();  
   }
 
   @override
@@ -27,7 +29,8 @@ class _BerriesScreenState extends State<BerriesScreen> {
         title: const Text('Berries'),
       ),
       body: FutureBuilder<List<Berry>>(
-        future: berriesFuture,
+        // Asignar lista de berries
+        future: berriesFuture,  
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -52,8 +55,7 @@ class _BerriesScreenState extends State<BerriesScreen> {
                 title: Text(berry.name.toUpperCase()),
                 subtitle: Text('ID: $berryId'),
                 onTap: () {
-                  final berryId =
-                      berry.url.split('/').where((e) => e.isNotEmpty).last;
+                  // Navegar a la pantalla de detalles al seleccionar una berry
                   Navigator.push(
                     context,
                     MaterialPageRoute(
