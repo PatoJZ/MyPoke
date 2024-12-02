@@ -14,6 +14,6 @@ A few resources to get you started if this is your first Flutter project:
 - [Diagrama de flujo](https://github.com/PatoJZ/pokemon_browser/blob/main/assets/Diagramas/Diagrama%20de%20flujo.pdf)
 
 
-[APK descargable](https://github.com/PatoJZ/pokemon_browser/blob/main/MyPoke.apk), which offers tutorials,
-[Video de presentación](https://drive.google.com/file/d/1evaFfLPwsDXdvGYm87Rz6i4QhD27tuh1/view?usp=sharing)
+-[APK descargable](https://github.com/PatoJZ/pokemon_browser/blob/main/MyPoke.apk), which offers tutorials,
+-[Video de presentación](https://drive.google.com/file/d/1evaFfLPwsDXdvGYm87Rz6i4QhD27tuh1/view?usp=sharing)
 
