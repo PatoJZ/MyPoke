@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pokemon_browser/DataBase/db_helper.dart';
 import 'PokemonDetailScreen.dart';
 import 'BerryDetailScreen.dart';
+import 'About.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
@@ -65,6 +66,17 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Favoritos'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyApp()),
+              );
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
