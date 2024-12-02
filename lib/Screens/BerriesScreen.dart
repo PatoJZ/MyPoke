@@ -157,7 +157,7 @@ class _BerriesScreenState extends State<BerriesScreen> {
                               }
                             },
                           ),
-                          onTap: () {
+                       onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(

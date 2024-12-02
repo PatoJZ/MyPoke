@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pokemon_browser/DataBase/db_helper.dart';
+import 'PokemonDetailScreen.dart';
+import 'BerryDetailScreen.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
@@ -117,7 +119,17 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                               await _toggleFavoriteBerry(berryId, berry['is_favorite'] == 1);
                             },
                           ),
+                           onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    BerryDetailScreen(berryId: berryId.toString()),
+                              ),
+                            );
+                          },
                         ),
+                        
                       );
                     },
                   ),
@@ -172,6 +184,15 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                               await _toggleFavoritePokemon(pokemonId, pokemon['is_favorite'] == 1);
                             },
                           ),
+                           onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    PokemonDetailScreen(pokemonId: pokemonId.toString()),
+                              ),
+                            );
+                          },
                         ),
                       );
                     },
