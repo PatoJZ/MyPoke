@@ -30,6 +30,24 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     });
   }
 
+  Future<void> _toggleFavoriteBerry(int berryId, bool isCurrentlyFavorite) async {
+    try {
+      await DBHelper().updateFavoriteStatus(berryId, isCurrentlyFavorite ? 0 : 1);
+      _loadFavorites(); // Recargar la lista de favoritos
+    } catch (e) {
+      print('Error al actualizar el estado favorito: $e');
+    }
+  }
+
+  Future<void> _toggleFavoritePokemon(int pokemonId, bool isCurrentlyFavorite) async {
+    try {
+      await DBHelper().updatePokemonFavoriteStatus(pokemonId, isCurrentlyFavorite ? 0 : 1);
+      _loadFavorites(); // Recargar la lista de favoritos
+    } catch (e) {
+      print('Error al actualizar el estado favorito: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,22 +67,53 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               ),
             ),
             favoriteBerries.isEmpty
-                ? const Center(child: Text('No tienes berries favoritas.'))
+                ? const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text('No tienes berries favoritas.'),
+                  )
                 : ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: favoriteBerries.length,
                     itemBuilder: (context, index) {
                       final berry = favoriteBerries[index];
-                      return ListTile(
-                        title: Text(berry['name'].toUpperCase()),
-                        subtitle: Text('ID: ${berry['id']}'),
+                      final berryId = berry['id'];
+                      final spriteUrl =
+                          "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/berries/${berry['name'].toLowerCase()}-berry.png";
+
+                      return Card(
+                        child: ListTile(
+                          leading: Image.network(
+                            spriteUrl,
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return const CircularProgressIndicator();
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(Icons.image_not_supported, size: 50);
+                            },
+                          ),
+                          title: Text(berry['name'].toUpperCase()),
+                          subtitle: Text('ID: $berryId'),
+                          trailing: IconButton(
+                            icon: Icon(
+                              berry['is_favorite'] == 1 ? Icons.favorite : Icons.favorite_border,
+                              color: berry['is_favorite'] == 1 ? Colors.red : Colors.grey,
+                            ),
+                            onPressed: () async {
+                              await _toggleFavoriteBerry(berryId, berry['is_favorite'] == 1);
+                            },
+                          ),
+                        ),
                       );
                     },
                   ),
             const Divider(),
 
-            // Sección de Pokémons favoritos
+            // Sección de Pokémones favoritos
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
@@ -73,16 +122,47 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               ),
             ),
             favoritePokemons.isEmpty
-                ? const Center(child: Text('No tienes pokémones favoritos.'))
+                ? const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text('No tienes pokémones favoritas.'),
+                  )
                 : ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: favoritePokemons.length,
                     itemBuilder: (context, index) {
                       final pokemon = favoritePokemons[index];
-                      return ListTile(
-                        title: Text(pokemon['name'].toUpperCase()),
-                        subtitle: Text('ID: ${pokemon['id']}'),
+                      final pokemonId = pokemon['id'];
+                      final spriteUrl =
+                          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$pokemonId.png';
+
+                      return Card(
+                        child: ListTile(
+                          leading: Image.network(
+                            spriteUrl,
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return const CircularProgressIndicator();
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(Icons.image_not_supported, size: 50);
+                            },
+                          ),
+                          title: Text(pokemon['name'].toUpperCase()),
+                          subtitle: Text('ID: $pokemonId'),
+                          trailing: IconButton(
+                            icon: Icon(
+                              pokemon['is_favorite'] == 1 ? Icons.favorite : Icons.favorite_border,
+                              color: pokemon['is_favorite'] == 1 ? Colors.red : Colors.grey,
+                            ),
+                            onPressed: () async {
+                              await _toggleFavoritePokemon(pokemonId, pokemon['is_favorite'] == 1);
+                            },
+                          ),
+                        ),
                       );
                     },
                   ),

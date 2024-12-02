@@ -35,6 +35,7 @@ class _PokemonsScreenState extends State<PokemonsScreen> {
     _scrollController.dispose();
     _searchController.dispose();
     super.dispose();
+    DBHelper().debugCheckTables();  // Verificar las tablas
   }
 
   Future<void> _fetchPokemons() async {
@@ -48,6 +49,14 @@ class _PokemonsScreenState extends State<PokemonsScreen> {
         limit: _limit,
         offset: _offset,
       );
+
+      // Verificamos el estado de favoritos desde la base de datos
+      for (var pokemon in newPokemons) {
+        final pokemonId =
+            pokemon.url.split('/').where((e) => e.isNotEmpty).last; // Extraer el ID desde la URL
+        final isFavorite = await DBHelper().isPokemonFavorite(int.parse(pokemonId));
+        pokemon.isFavorite = isFavorite == 1;
+      }
 
       setState(() {
         _pokemons.addAll(newPokemons);
@@ -63,20 +72,6 @@ class _PokemonsScreenState extends State<PokemonsScreen> {
     }
   }
 
-  Future<void> _fetchSpecificPokemon(String query) async {
-    try {
-      final pokemon = await _pokemonService.fetchPokemonByName(query.toLowerCase());
-      if (!_pokemons.any((p) => p.name == pokemon.name)) {
-        setState(() {
-          _pokemons.add(pokemon);
-        });
-      }
-      _filterPokemons(query); // Filtra después de cargar
-    } catch (e) {
-      print('Error fetching specific pokemon: $e');
-    }
-  }
-
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200 && !_isLoading) {
@@ -84,7 +79,7 @@ class _PokemonsScreenState extends State<PokemonsScreen> {
     }
   }
 
-  void _filterPokemons(String query) async {
+  void _filterPokemons(String query) {
     if (query.isEmpty) {
       setState(() {
         _isSearching = false;
@@ -93,28 +88,11 @@ class _PokemonsScreenState extends State<PokemonsScreen> {
     } else {
       setState(() {
         _isSearching = true;
+        _filteredPokemons = _pokemons
+            .where((pokemon) =>
+                pokemon.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
       });
-
-      // Buscar coincidencias parciales en la lista de Pokémon cargados
-      final matches = _pokemons
-          .where((pokemon) =>
-              pokemon.name.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-
-      if (matches.isEmpty) {
-        // Si no encontramos coincidencias, cargamos los Pokémon por nombre parcial desde la API
-        final partialPokemons = await _pokemonService.fetchPokemonsByPartialName(query);
-        
-        // Actualiza la lista con los Pokémon encontrados
-        setState(() {
-          _pokemons.addAll(partialPokemons);  // Añadir nuevos Pokémon a la lista
-          _filteredPokemons = partialPokemons;  // Filtrar y mostrar los encontrados
-        });
-      } else {
-        setState(() {
-          _filteredPokemons = matches;
-        });
-      }
     }
   }
 

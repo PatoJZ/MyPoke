@@ -29,9 +29,21 @@ class _BerriesScreenState extends State<BerriesScreen> {
   Future<void> _fetchBerries() async {
     try {
       final berries = await BerryService().fetchBerries();
+
+      // Verificar el estado de favoritos desde la base de datos
+      for (var berry in berries) {
+        final berryId = berry.url
+            .split('/')
+            .where((e) => e.isNotEmpty)
+            .last; // Extraer el ID desde la URL
+        final isFavorite = await DBHelper().isBerryFavorite(
+            int.parse(berryId)); // Consultar en la base de datos
+        berry.isFavorite = isFavorite == 1;
+      }
+
       setState(() {
         _allBerries = berries;
-        _filteredBerries = berries; // Initially, show all berries
+        _filteredBerries = berries; // Inicialmente, mostrar todas las berries
       });
     } catch (e) {
       print('Error fetching berries: $e');
@@ -49,7 +61,8 @@ class _BerriesScreenState extends State<BerriesScreen> {
       setState(() {
         _isSearching = true;
         _filteredBerries = _allBerries
-            .where((berry) => berry.name.toLowerCase().contains(query.toLowerCase()))
+            .where((berry) =>
+                berry.name.toLowerCase().contains(query.toLowerCase()))
             .toList();
       });
     }
@@ -95,7 +108,8 @@ class _BerriesScreenState extends State<BerriesScreen> {
                     itemCount: _filteredBerries.length,
                     itemBuilder: (context, index) {
                       final berry = _filteredBerries[index];
-                      final berryId = berry.url.split('/').where((e) => e.isNotEmpty).last;
+                      final berryId =
+                          berry.url.split('/').where((e) => e.isNotEmpty).last;
                       final spriteUrl =
                           "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/berries/${berry.name.toLowerCase()}-berry.png";
 
@@ -111,15 +125,19 @@ class _BerriesScreenState extends State<BerriesScreen> {
                               return const CircularProgressIndicator();
                             },
                             errorBuilder: (context, error, stackTrace) {
-                              return const Icon(Icons.image_not_supported, size: 50);
+                              return const Icon(Icons.image_not_supported,
+                                  size: 50);
                             },
                           ),
                           title: Text(berry.name.toUpperCase()),
                           subtitle: Text('ID: $berryId'),
                           trailing: IconButton(
                             icon: Icon(
-                              berry.isFavorite ? Icons.favorite : Icons.favorite_border,
-                              color: berry.isFavorite ? Colors.red : Colors.grey,
+                              berry.isFavorite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color:
+                                  berry.isFavorite ? Colors.red : Colors.grey,
                             ),
                             onPressed: () async {
                               final isCurrentlyFavorite = berry.isFavorite;
@@ -134,7 +152,8 @@ class _BerriesScreenState extends State<BerriesScreen> {
                                   berry.isFavorite = !isCurrentlyFavorite;
                                 });
                               } catch (e) {
-                                print('Error al actualizar el estado favorito: $e');
+                                print(
+                                    'Error al actualizar el estado favorito: $e');
                               }
                             },
                           ),
@@ -142,7 +161,8 @@ class _BerriesScreenState extends State<BerriesScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => BerryDetailScreen(berryId: berryId),
+                                builder: (context) =>
+                                    BerryDetailScreen(berryId: berryId),
                               ),
                             );
                           },

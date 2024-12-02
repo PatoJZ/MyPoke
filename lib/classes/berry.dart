@@ -1,7 +1,7 @@
 class Berry {
   final String name;
   final String url;
-  bool isFavorite; // Nueva variable
+  bool isFavorite;
 
   Berry({required this.name, required this.url, this.isFavorite = false});
 
@@ -10,5 +10,10 @@ class Berry {
       name: json['name'],
       url: json['url'],
     );
+  }
+
+  int get id {
+    final segments = url.split('/');
+    return int.parse(segments[segments.length - 2]); // Obtiene el ID de la URL
   }
 }

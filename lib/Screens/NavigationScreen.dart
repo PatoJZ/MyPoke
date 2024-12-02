@@ -32,20 +32,20 @@ class _NavigationScreenState extends State<NavigationScreen> {
             _currentIndex = index;
           });
         },
-        items: const [
+        items: [
           // BottomNavigationBarItem(
           //  icon: Icon(Icons.house),
           //  label: 'Home',
           //),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.circle),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.apple),
             label: 'berries',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.pets),
+            icon: Icon(Icons.book),
             label: 'Pokemones',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
             label: 'Favoritos',
           ),

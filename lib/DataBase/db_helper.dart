@@ -58,6 +58,60 @@ class DBHelper {
       },
     );
   }
+Future<void> debugCheckTables() async {
+    final db = await database;
+
+    // Verificamos el conteo de Pokémon en la tabla pokemons
+    final pokemonCount = Sqflite.firstIntValue(
+        await db.rawQuery('SELECT COUNT(*) FROM pokemons'));
+
+    // Verificamos el conteo de berries en la tabla berries
+    final berryCount = Sqflite.firstIntValue(
+        await db.rawQuery('SELECT COUNT(*) FROM berries'));
+
+    print('Total Pokémon en la base de datos: $pokemonCount');
+    print('Total Berries en la base de datos: $berryCount');
+
+    if (pokemonCount == 0) {
+      print('No hay Pokémon en la base de datos.');
+    } else {
+      print('La tabla de Pokémon tiene $pokemonCount registros.');
+    }
+
+    if (berryCount == 0) {
+      print('No hay Berries en la base de datos.');
+    } else {
+      print('La tabla de Berries tiene $berryCount registros.');
+    }
+  }
+
+  Future<int> isPokemonFavorite(int id) async {
+    final db = await database;
+    final result = await db.query(
+      'pokemons',
+      columns: ['is_favorite'],
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (result.isNotEmpty) {
+      return result.first['is_favorite'] as int;
+    }
+    return 0;
+  }
+
+  Future<int> isBerryFavorite(int id) async {
+    final db = await database;
+    final result = await db.query(
+      'berries',
+      columns: ['is_favorite'],
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (result.isNotEmpty) {
+      return result.first['is_favorite'] as int;
+    }
+    return 0;
+  }
 
   // Métodos para la tabla de Pokémon
   Future<void> insertPokemon(Map<String, dynamic> pokemon) async {
