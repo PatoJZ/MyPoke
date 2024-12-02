@@ -69,49 +69,45 @@ class MyApp extends StatelessWidget {
         fontFamily: "baloo",
 
         useMaterial3: true,
-        // Define un esquema de colores suavizados
         colorScheme: const ColorScheme(
           primary: Color(0xFFD32F2F), // Rojo Suave
-          primaryContainer: Color(0xFFB71C1C), // Tonalidad más oscura
-          secondary: Color(0xFFFBC02D), // Amarillo Suave
-          secondaryContainer: Color(0xFFF57F17), // Blanco Crema
-          surface: Color(0xFFFFFFFF), // Fondo de componentes
-          onPrimary: Color(0xFFFFFFFF), // Texto sobre color primario (Blanco)
-          onSecondary: Color(0xFF5C6BC0), // Texto sobre fondo (Gris Oscuro)
-          onSurface: Color(0xFF37474F), // Texto sobre superficies (Gris Oscuro)
-          error: Colors.red, // Color de error
-          onError: Colors.white, // Texto sobre error
-          brightness: Brightness.light, // Tema claro
+          primaryContainer: Color(0xFFB71C1C),
+          secondary: Color(0xFFFBC02D),
+          secondaryContainer: Color(0xFFF57F17),
+          surface: Color(0xFFFFFFFF),
+          onPrimary: Color(0xFFFFFFFF),
+          onSecondary: Color(0xFF5C6BC0),
+          onSurface: Color(0xFF37474F),
+          error: Colors.red,
+          onError: Colors.white,
+          brightness: Brightness.light,
         ),
-        scaffoldBackgroundColor: const Color(0xFFFAFAFA), // Fondo de la app
-        // Tema del AppBar
+        scaffoldBackgroundColor: const Color(0xFFFAFAFA),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFFD32F2F), // Fondo rojo suave
-          foregroundColor: Color(0xFFFFFFFF), // Texto blanco
-          elevation: 0, // Sin sombra
+          backgroundColor: Color(0xFFD32F2F),
+          foregroundColor: Color(0xFFFFFFFF),
+          elevation: 0,
           centerTitle: true,
         ),
-        // Tema para los botones elevados
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFFFBC02D), // Fondo amarillo suave
-            foregroundColor: const Color(0xFF5C6BC0), // Texto azul suave
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8), // Bordes redondeados
-            ),
+            backgroundColor: const Color(0xFFFBC02D),
+            foregroundColor: const Color(0xFF5C6BC0),
           ),
         ),
-        // Tema del BottomNavigationBar
-        
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          selectedItemColor: Color(0xFFD32F2F), // Ícono seleccionado rojo suave
-        
-          unselectedItemColor:
-              Color(0xFF5C6BC0), // Ícono no seleccionado azul suave
-          backgroundColor: Color(0xFFFBC02D), // Fondo amarillo suave
+        inputDecorationTheme: InputDecorationTheme(
+          labelStyle: const TextStyle(color: Color(0xFFD32F2F)),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Color(0xFFD32F2F)),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Color(0xFFD32F2F)),
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
       ),
-      home: const NavigationScreen(),
+      home: NavigationScreen(),
     );
   }
 }

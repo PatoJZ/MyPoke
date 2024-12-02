@@ -36,6 +36,7 @@ class DBHelper {
             is_favorite INTEGER DEFAULT 0
           )
         ''');
+
         await db.execute('''
           CREATE TABLE pokemons (
             id INTEGER PRIMARY KEY,
@@ -43,22 +44,28 @@ class DBHelper {
             height INTEGER,
             weight INTEGER,
             sprite_url TEXT,
-            types TEXT
+            types TEXT,
             is_favorite INTEGER DEFAULT 0
           )
         ''');
       },
-      version: 2, // Incrementamos la versión de la base de datos
+      version: 3, // Incrementamos la versión a 3 para la migración
       onUpgrade: (db, oldVersion, newVersion) async {
-        if (oldVersion < 2) {
-          // Migración para agregar la columna is_favorite a pokemons si no existe
-          await db.execute(
-              'ALTER TABLE pokemons ADD COLUMN is_favorite INTEGER DEFAULT 0');
+        if (oldVersion < 3) {
+          // Verificar si la columna 'is_favorite' ya existe en la tabla 'pokemons'
+          var result = await db.rawQuery('PRAGMA table_info(pokemons)');
+          bool columnExists = result.any((column) => column['name'] == 'is_favorite');
+          
+          if (!columnExists) {
+            // Si no existe, agregar la columna
+            await db.execute('ALTER TABLE pokemons ADD COLUMN is_favorite INTEGER DEFAULT 0');
+          }
         }
       },
     );
   }
-Future<void> debugCheckTables() async {
+
+  Future<void> debugCheckTables() async {
     final db = await database;
 
     // Verificamos el conteo de Pokémon en la tabla pokemons
