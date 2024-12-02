@@ -72,7 +72,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MyApp()),
+                MaterialPageRoute(builder: (context) => About()),
               );
             },
           ),

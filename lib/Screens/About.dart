@@ -1,27 +1,20 @@
 import 'package:flutter/material.dart';
 
+class About extends StatelessWidget {
+  const About({super.key});
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Texto al Medio',
-      home: CenterTextScreen(),
-    );
-  }
-}
-
-class CenterTextScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('About'),
+        title: const Text('About'),
+        backgroundColor: Colors.red,
       ),
       body: Center(
-        child: Text(
-        'App por: \nPatricio Jinmenez \nSergio Poblete',
+        child: const Text(
+          'App por: \nPatricio Jimenez \nSergio Poblete',
           style: TextStyle(fontSize: 24),
+          textAlign: TextAlign.center,
         ),
       ),
     );
