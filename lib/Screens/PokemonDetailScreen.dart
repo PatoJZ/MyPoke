@@ -26,7 +26,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
     pokemonDetailFuture = PokemonService().fetchPokemonDetail(widget.pokemonId);
   }
 
-  /// Descarga la imagen desde la URL y la guarda en un archivo temporal.
+  
   Future<File> _downloadImage(String url) async {
     final response = await http.get(Uri.parse(url));
     final tempDir = await getTemporaryDirectory();
@@ -35,7 +35,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen> {
     return file.writeAsBytes(response.bodyBytes);
   }
 
-  /// Comparte texto e imagen.
+
   Future<void> _sharePokemon(PokemonDetail pokemon) async {
     try {
       final imageFile = await _downloadImage(pokemon.spriteUrl);
