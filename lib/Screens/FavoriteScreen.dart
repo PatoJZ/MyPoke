@@ -19,11 +19,11 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   }
 
   Future<void> _loadFavorites() async {
-    // Cargar favoritos desde la base de datos
+  
     final berries = await DBHelper().getFavoriteBerries();
     final pokemons = await DBHelper().getFavoritePokemons();
 
-    // Actualizar el estado para mostrar los resultados
+ 
     setState(() {
       favoriteBerries = berries;
       favoritePokemons = pokemons;
@@ -32,8 +32,13 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
 
   Future<void> _toggleFavoriteBerry(int berryId, bool isCurrentlyFavorite) async {
     try {
-      await DBHelper().updateFavoriteStatus(berryId, isCurrentlyFavorite ? 0 : 1);
-      _loadFavorites(); // Recargar la lista de favoritos
+      await DBHelper().toggleBerryFavorite(
+        berryId,
+        isCurrentlyFavorite ? false : true,
+        "Berry Name", 
+        "Berry Image URL" 
+      );
+      _loadFavorites(); 
     } catch (e) {
       print('Error al actualizar el estado favorito: $e');
     }
@@ -41,8 +46,13 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
 
   Future<void> _toggleFavoritePokemon(int pokemonId, bool isCurrentlyFavorite) async {
     try {
-      await DBHelper().updatePokemonFavoriteStatus(pokemonId, isCurrentlyFavorite ? 0 : 1);
-      _loadFavorites(); // Recargar la lista de favoritos
+      await DBHelper().togglePokemonFavorite(
+        pokemonId,
+        isCurrentlyFavorite ? false : true,
+        "Pokemon Name", 
+        "Pokemon Sprite URL" 
+      );
+      _loadFavorites(); 
     } catch (e) {
       print('Error al actualizar el estado favorito: $e');
     }

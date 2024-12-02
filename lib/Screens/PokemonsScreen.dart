@@ -35,7 +35,7 @@ class _PokemonsScreenState extends State<PokemonsScreen> {
     _scrollController.dispose();
     _searchController.dispose();
     super.dispose();
-    DBHelper().debugCheckTables();  // Verificar las tablas
+    DBHelper().debugCheckTables();  
   }
 
   Future<void> _fetchPokemons() async {
@@ -50,17 +50,16 @@ class _PokemonsScreenState extends State<PokemonsScreen> {
         offset: _offset,
       );
 
-      // Verificamos el estado de favoritos desde la base de datos
       for (var pokemon in newPokemons) {
         final pokemonId =
-            pokemon.url.split('/').where((e) => e.isNotEmpty).last; // Extraer el ID desde la URL
+            pokemon.url.split('/').where((e) => e.isNotEmpty).last; 
         final isFavorite = await DBHelper().isPokemonFavorite(int.parse(pokemonId));
         pokemon.isFavorite = isFavorite == 1;
       }
 
       setState(() {
         _pokemons.addAll(newPokemons);
-        _filteredPokemons = _pokemons; // Inicialmente, todos los Pokémon están visibles
+        _filteredPokemons = _pokemons; 
         _offset += _limit;
       });
     } catch (e) {
@@ -79,19 +78,21 @@ class _PokemonsScreenState extends State<PokemonsScreen> {
     }
   }
 
-  void _filterPokemons(String query) {
+  void _filterPokemons(String query) async {
     if (query.isEmpty) {
       setState(() {
         _isSearching = false;
-        _filteredPokemons = _pokemons;
+        _filteredPokemons = _pokemons;  
       });
     } else {
       setState(() {
         _isSearching = true;
-        _filteredPokemons = _pokemons
-            .where((pokemon) =>
-                pokemon.name.toLowerCase().contains(query.toLowerCase()))
-            .toList();
+      });
+
+     
+      final result = await _pokemonService.fetchPokemonsByPartialName(query);
+      setState(() {
+        _filteredPokemons = result;
       });
     }
   }
@@ -152,15 +153,10 @@ class _PokemonsScreenState extends State<PokemonsScreen> {
                         child: ListTile(
                           leading: CachedNetworkImage(
                             imageUrl: spriteUrl,
-                            width: 50,
-                            height: 50,
                             placeholder: (context, url) =>
                                 const CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.image_not_supported),
                           ),
-                          title: Text(pokemon.name.toUpperCase()),
-                          subtitle: Text('Dex num: $pokemonId'),
+                          title: Text(pokemon.name),
                           trailing: IconButton(
                             icon: Icon(
                               pokemon.isFavorite
@@ -175,9 +171,13 @@ class _PokemonsScreenState extends State<PokemonsScreen> {
                               });
 
                               try {
-                                await DBHelper().updatePokemonFavoriteStatus(
+                                final pokemonId = pokemon.url.split('/').where((e) => e.isNotEmpty).last;
+                                final spriteUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$pokemonId.png';
+                                await DBHelper().togglePokemonFavorite(
                                   int.parse(pokemonId),
-                                  isCurrentlyFavorite ? 0 : 1,
+                                  !isCurrentlyFavorite,
+                                  pokemon.name,
+                                  spriteUrl,
                                 );
                               } catch (e) {
                                 setState(() {
@@ -187,7 +187,7 @@ class _PokemonsScreenState extends State<PokemonsScreen> {
                               }
                             },
                           ),
-                          onTap: () {
+                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
