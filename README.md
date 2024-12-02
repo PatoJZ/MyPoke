@@ -4,7 +4,7 @@ PokeApp es una aplicacion movil multiplataforma dearrollada en flutter que busca
 
 ## Caracteristicas principales
 
-PokeApp presenta 3 pantallas principales, las primeras 2 son para ver la totalidad de berries y pokemon de la franquicia, ademas esta cuenta con una barra de busqueda, para acortar el tiempo que podria gastar el usuarion en hacer scroll hasta llegar al pokemon o berry que este desee ver.En estas tambien existe un boton para añadirlos a favoritos, ademas de que si se le hace click
+PokeApp presenta 3 pantallas principales, las primeras 2 son para ver la totalidad de berries y pokemon de la franquicia, ademas esta cuenta con una barra de busqueda, para acortar el tiempo que podria gastar el usuarion en hacer scroll hasta llegar al pokemon o berry que este desee ver.En estas tambien existe un boton para añadirlos a favoritos, ademas de que si se le hace click al objeto se abrira su pantalla de detalles y en el caso de los pokemon, se podra compartir la informacion de estos, mediante al uso del boton compartir en la esquina superiror de los detalles de esta.
 
 This project is a starting point for a Flutter application.
 
