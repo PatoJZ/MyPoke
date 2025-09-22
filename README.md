@@ -1,5 +1,5 @@
 # MyPoke
-
+(this proyect was created for a mobile app development during University)
 PokeApp es una aplicación móvil multiplataforma desarrollada en Flutter que busca simplificar la búsqueda, guardado y compartido de Pokémon, objetos e información relacionada con la franquicia "Pokémon" para los fans de esta, esto se debe a que en la actualidad, para obtener esta información, los usuarios deben entrar a un buscador, buscar el Pokémon, guardar la imagen, copiar la información, etc... para poder compartirla. En cambio, en esta aplicación hacen falta solo 3 clicks para poder guardar y compartir información de sus monstruos de bolsillo favoritos.
 
 ## Características principales
